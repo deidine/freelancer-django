@@ -1,0 +1,106 @@
+{% load static %}
+	{% if request.user.is_authenticated %}
+		<header>
+			<div class="container">
+			<div class="header-data">
+				<div class="logo">
+					<a href="{% url 'index' %}" title=""><img src="{% static 'images/logo.png' %}" alt=""></a>
+				</div><!--logo end-->
+				<div class="search-bar">
+					<form action="{% url 'search-jobs' %}" method="GET">
+						<input type="text" name="q" placeholder="Search...">
+						<button type="submit"><i class="la la-search"></i></button>
+					</form>
+				</div><!--search-bar end-->
+				<nav>
+					<ul>
+						<li>
+							<a href="{% url 'index' %}" title="home">
+								<span><img src="{% static 'images/icon1.png' %}"></span>
+								Home
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'projects' %}" title="projects">
+								<span><img src="{% static 'images/icon3.png' %}"></span>
+								Projects
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'user-profile' request.user request.user.id %}" title="my profile">
+								<span><img src="{% static 'images/icon4.png' %} "></span>
+								Profile
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'jobs' %}" title="jobs">
+								<span><img src="{% static 'images/icon5.png' %}"></span>
+								Jobs
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'messages' %}">
+
+								<span>
+									<i class="fa fa-envelope" aria-hidden="true"></i>
+								</span>
+								Messages
+								{% if directs_count != 0 %}
+									<div class="message_noti">
+										<span class="badge badge-light">{{ directs_count }}</span>
+									</div>
+								{% endif %}
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'show-notifications' %}">
+								<span>
+									<i class="fa fa-bell" aria-hidden="true"></i>
+								</span>
+								Notification
+								{% if count_notifications != 0 %}
+									<span class="badge badge-light">{{ count_notifications }}</span>
+								{% endif %}
+							</a>
+
+						</li>
+					</ul>
+				</nav><!--nav end-->
+				<div class="menu-btn">
+					<a href="#" title=""><i class="fa fa-bars"></i></a>
+				</div><!--menu-btn end-->
+				<div class="user-account">
+					<div class="user-info">
+						<img src="{{ request.user.photo_profile.url }}" width="35" height="35">
+						<a title="{{ request.user.full_name }}">{{ request.user.first_name | truncatechars:11 }}</a>
+						<i class="la la-sort-down"></i>
+					</div>
+					<div class="user-account-settingss">
+						<h3>Setting</h3>
+						<ul class="us-links">
+							<li><a href="{% url 'edit-profile' %}" title="">Account Setting</a></li>
+						</ul>
+						<h3 class="tc"><a href="{% url 'logout' %}" title="">Logout</a></h3>
+					</div><!--user-account-settingss end-->
+				</div>
+			</div><!--header-data end-->
+		</div>
+		</header>
+	{% else %}
+		<header>
+			<div class="container">
+				<div class="header-data">
+					<div class="logo pd-btm">
+						<a href="index.html" title=""><img src="images/logo.png" alt=""></a>
+					</div><!--logo end-->
+					<div class="login_register">
+						<ul>
+							<li><a href="{% url 'login' %}">Login</a></li>
+							<li><a href="{% url 'register' %}">Register</a></li>
+						</ul>
+					</div><!--login_register end-->
+				</div><!--header-data end-->
+			</div>
+		</header>
+	{% endif %}
+	<!--header for user authenticated end-->

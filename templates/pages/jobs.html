@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+	<title> Jobs </title>
+{% endblock title %}
+
+{% block content %}
+
+<div class="search-sec">
+	<div class="container">
+		<div class="search-box">
+			<form method="GET" action="{% url 'search-jobs' %}">
+				<input type="text" name="q" placeholder="Search keywords" required>
+				<button type="submit">Search</button>
+			</form>
+		</div><!--search-box end-->
+	</div>
+</div><!--search-sec end-->
+
+
+<main>
+	<div class="main-section">
+		<div class="container">
+			{% include 'includes/alerts.html' %}
+			<div class="main-section-data">
+				<div class="row">
+					<div class="col-lg-3">
+						<div class="filter-secs">
+							<div class="filter-heading">
+								<h3>Filters</h3>
+							</div><!--filter-heading end-->
+							<!-- filter jobs -->
+							<form action="{% url 'filter-jobs' %}" method="POST">
+								{% csrf_token %}
+								<div class="paddy">
+									<div class="filter-dd">
+										<div class="filter-ttl">
+											<h3>Skills</h3>
+										</div>
+											<input class="form-control" type="text" name="search_skills" placeholder="Search skills" style="background-color:#f2f2f2;">
+									</div>
+									<div class="filter-dd">
+										<div class="filter-ttl">
+											<h3>Availabilty</h3>
+										</div>
+										<ul class="avail-checks">
+											<li>
+												<input type="radio" name="availabilty" id="c1" value="Hourly">
+												<label for="c1"><span></span></label>
+												<small>Hourly</small>
+											</li>
+											<li>
+												<input type="radio" name="availabilty" id="c2" value="Part Time">
+												<label for="c2"><span></span></label>
+												<small>Part Time</small>
+											</li>
+											<li>
+												<input type="radio" name="availabilty" id="c3" value="Full Time">
+												<label for="c3"><span></span></label>
+												<small>Full Time</small>
+											</li>
+										</ul>
+									</div>
+									<div class="form-row">
+										<div class="filter-ttl">
+											<h3>Pay Rate / Hr ($)</h3>
+										</div>
+										<div class="filter-dd form-group col-md-6">
+												<input class="form-control" type="number" name="min_price" placeholder="Min price" style="background-color:#f2f2f2;">
+										</div>
+										<div class="filter-dd form-group col-md-6">
+												<input class="form-control" type="number" name="max_price" placeholder="Max price" style="background-color:#f2f2f2;">
+										</div>
+									</div>
+									<div class="filter-dd">
+										<div class="filter-ttl">
+											<h3>Experience Level</h3>
+										</div>
+											<select class="form-control" style="background-color:#f2f2f2;" name="experience_level">
+												<option selected="selected" disabled>Select a experience level</option>
+												<option value="1 years">+1 years</option>
+												<option value="2 years">+2 years</option>
+												<option value="3 years">+3 years</option>
+												<option value="4 years">+4 years</option>
+												<option value="5 years">+5 years</option>
+											</select>
+									</div>
+									<div class="filter-dd">
+										<div class="filter-ttl">
+											<h3>Countries</h3>
+										</div>
+										<input class="form-control" name="country" placeholder="Country" style="background-color:#f2f2f2;">
+
+									</div>
+
+									<input type="submit" class="form-control" value="Search" style="background-color:#e44d3a; color:white">
+									<br>
+								</div>
+							</form>
+							<!-- filter jobs end -->
+						</div><!--filter-secs end-->
+					</div>
+
+					<div class="col-lg-6">
+						<div class="main-ws-sec">
+							<div class="posts-section">
+								{% if all_user_profile %}
+									{% for user_profile_job in all_user_profile %}
+										{% if request.user.username != user_profile_job.user.username and user_profile_job.hide %}
+											<!-- if the user hide his job -->
+										{% else %}
+											<div class="post-bar">
+												<div class="post_topbar">
+													<div class="usy-dt">
+														<img src="{{ user_profile_job.user.photo_profile.url }}" width="50" height="50">
+														<div class="usy-name">
+															<a href="{% url 'user-profile' user_profile_job.user user_profile_job.user.id %}">
+																<h3>{{ user_profile_job.user.full_name }}</h3>
+															</a>
+															<span><img src="{% static 'images/clock.png' %}" alt="">{{ user_profile_job.created_job | naturaltime }}</span>
+														</div>
+													</div>
+													{% if user_profile_job.user == request.user %}
+														<div class="ed-opts">
+															<a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+															<ul class="ed-options">
+																<li><a href="{% url 'edit-post-job' user_profile_job.id %}">Edit Post</a></li>
+																<li>
+																	<a href="{% url 'delete-post-job' user_profile_job.id %}" onclick="return confirm('Are you sure to Delete this post')">
+																		Delete Post
+																	</a>
+																</li>
+																{% if user_profile_job.hide %}
+																	<li><a href="{% url 'unhide-job' user_profile_job.id %}">unhide</a></li>
+																{% else %}
+																	<li><a href="{% url 'hide-job' user_profile_job.id %}">Hide</a></li>
+																{% endif %}
+																<li><a href="#" class="close-ed-opts">Close</a></li>
+															</ul>
+														</div>
+													{% endif %}
+												</div>
+												<div class="epi-sec">
+													<ul class="descp">
+														<li><img src="{% static 'images/icon8.png' %}" alt=""><span>{{ user_profile_job.epic_coder }}</span></li>
+														<li><img src="{% static 'images/icon9.png' %}" alt=""><span>{{ user_profile_job.location }}</span></li>
+													</ul>
+													{% if request.user.username != user_profile_job.user.username %}
+														<ul class="bk-links">
+															<li>
+																{% if request.user != user_profile.user %}
+																	<!-- get the id of UserProfile -->
+																	{% if user_profile_job in my_profile.saved_jobs.all %}
+																		<a href="{% url 'unsaved-jobs' user_profile_job.id %}">
+																			<i class="la la-check"></i>
+																		</a>
+																	{% else %}
+																		<a href="{% url 'saved-jobs' user_profile_job.id %}">
+																			<i class="la la-bookmark"></i>
+																		</a>
+																	{% endif %}
+																{% endif %}
+															</li>
+															<li>
+																<a href="{% url 'add-user-to-conversation' user_profile_job.user.id %}">
+																	<i class="la la-envelope"></i>
+																</a>
+															</li>
+														</ul>
+													{% endif %}
+
+													<!-- check if post project is hiding then show Hiding-->
+													{% if user_profile_job.hide == True %}
+														<ul class="bk-links">
+															<li>
+																<a class="bid_now" style="background-color:gray;">Hiding</a>
+															</li>
+														</ul>
+													{% endif %}
+												</div>
+												<div class="job_descp">
+													<h3>{{user_profile_job.name_jobs }}</h3>
+													<ul class="job-dt">
+														<li><a title="">{{ user_profile_job.type_work_job }}</a></li>
+														<li><span>${{ user_profile_job.price }} / hr</span></li>
+													</ul>
+													<p title="description job">
+														{{ user_profile_job.description_job | truncatechars:150 }}
+														{% if user_profile_job.description_job|length > 30 %}
+															....<a href="{% url 'comment-jobs' user_profile_job.id %}">view more</a>
+														{% endif %}
+													</p>
+													<ul class="skill-tags">
+														{% for tags in user_profile_job.skills_tags_jobs.all %}
+															<li><a>{{ tags }}</a></li>
+														{% endfor %}
+													</ul>
+												</div>
+												<div class="job-status-bar">
+													<ul class="like-com">
+														<li>
+															<!-- check the user do a like -->
+															{% if request.user in user_profile_job.likes.all %}
+																<a href="{% url 'remove-like-post-jobs' user_profile_job.id %}" class="active"><i class="la la-heart"></i> Like</a>
+																<img src="{% static 'images/liked-img.png' %}">
+																<span>{{ user_profile_job.likes.all.count }}</span>
+															{% else %}
+																<a href="{% url 'add-like-post-jobs' user_profile_job.id %}"><i class="la la-heart"></i> Like</a>
+																<img src="{% static 'images/liked-img.png' %}">
+																<span>{{ user_profile_job.likes.all.count }}</span>
+															{% endif %}
+														</li>
+														<li>
+															<a class="com" href="{% url 'comment-jobs' user_profile_job.id %}">
+																<img src="{% static 'images/com.png' %}">
+																Comment {{ user_profile_job.post_job_comment.all.count }}
+															</a>
+														</li>
+													</ul>
+													<a><i class="la la-eye"></i>Views {{ user_profile_job.viewers_job.all.count }}</a>
+												</div>
+											</div><!--post-bar end-->
+										{% endif %}
+									{% endfor %}
+								{% else %}
+									<div class="post-bar">
+										<div class="post_topbar">
+											<div class="usy-dt">
+												<p>No result found</p>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+								<!-- =============== Pagination =============== -->
+								<nav class="full-pagi">
+									{% if all_user_profile.has_other_pages %}
+										<ul class="pagination justify-content-center">
+											{% if all_user_profile.has_previous %}
+												<li class="page-item">
+													<a class="page-link pvr" href="?page={{ all_user_profile.previous_page_number }}">Previous</a>
+												</li>
+											{% else %}
+												<li class="page-item disabled">
+													<a class="page-link pvr">Previous</a>
+												</li>
+											{% endif %}
+
+											{% for i in all_user_profile.paginator.page_range %}
+												{% if all_user_profile.number == i %}
+													<li class="page-item">
+														<a class="page-link active">{{ i }}</a>
+													</li>
+												{% elif i > all_user_profile.number|add:'-4' and i < all_user_profile.number|add:'4' %}
+													<li class="page-item">
+														<a class="page-link" href="?page={{ i }}">{{ i }}</a>
+													</li>
+												{% endif %}
+											{% endfor %}
+
+											{% if all_user_profile.has_next %}
+												<li class="page-item">
+													<a class="page-link pvr" href="?page={{ all_user_profile.next_page_number }}">Next</a>
+												</li>
+											{% else %}
+												<li class="page-item disabled">
+													<a class="page-link pvr">Next</a>
+												</li>
+											{% endif %}
+										</ul>
+									{% endif %}
+								</nav>
+								<!-- =============== end Pagination =============== -->
+							</div><!--posts-section end-->
+						</div><!--main-ws-sec end-->
+					</div>
+
+					<div class="col-lg-3">
+						<div class="right-sidebar">
+							<div class="widget widget-jobs">
+								<div class="sd-title">
+									<h3>Top Jobs</h3>
+								</div>
+								<div class="jobs-list">
+											{% for top in top_jobs %}
+												<div class="job-info">
+													<div class="job-details">
+														<a href="{% url 'comment-jobs' top.job_id %}">
+															<h3>{{ top.name_jobs }}</h3>
+														</a>
+														<p>{{ top.description_job | truncatechars:45 }}</p>
+													</div>
+													<div class="hr-rate">
+														<span>${{ top.price }}/hr</span>
+													</div>
+												</div><!--job-info end-->
+											{% endfor %}
+										</div><!--jobs-list end-->
+							</div><!--widget-jobs end-->
+							<div class="widget widget-jobs">
+								<div class="sd-title">
+									<h3>Most Viewed This Week</h3>
+								</div>
+								<div class="jobs-list">
+									{% for most_viewed in jobs_most_viewed_this_week %}
+										<div class="job-info">
+										<div class="job-details">
+											<a href="{% url 'comment-jobs' most_viewed.job_id %}">
+												<h3>{{ most_viewed.name_jobs }}</h3>
+											</a>
+											<p>{{ most_viewed.description_job | truncatechars:45 }}</p>
+										</div>
+										<div class="hr-rate">
+											<span>${{ most_viewed.price }}/hr</span>
+										</div>
+									</div><!--job-info end-->
+									{% endfor %}
+								</div><!--jobs-list end-->
+							</div><!--widget-jobs end-->
+						</div><!--right-sidebar end-->
+					</div>
+
+				</div>
+			</div><!-- main-section-data end-->
+		</div>
+	</div>
+</main>
+
+
+{% endblock content %}

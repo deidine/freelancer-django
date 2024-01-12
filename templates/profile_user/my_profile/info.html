@@ -1,0 +1,87 @@
+    <!-- overview -->
+    <div class="user-profile-ov">
+        <h3>
+            <a>Overview</a>
+            {% if request.user == current_user_profile.user %}
+                <a href="{% url 'edit-profile' %}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            {% endif %}
+        </h3>
+        {% if current_user_profile.overview %}
+            <pre>{{ current_user_profile.overview }}</pre>
+        {% endif %}
+    </div>
+
+    <!-- experience -->
+    <div class="user-profile-ov st2">
+        <h3>
+            <a>Experience </a>
+            {% if request.user == current_user_profile.user %}
+                <a href="{% url 'edit-profile' %}"><i class="fa fa-pencil"></i></a>
+                <a href="{% url 'edit-profile' %}"><i class="fa fa-plus-square"></i></a>
+            {% endif %}
+        </h3>
+        {% for experience in user_experience %}
+            <!-- if experience.experince_title != None %} check if experince_title is None  -->
+            <h4>
+                {{ experience.experince_title }}
+            </h4>
+            <p>{{ experience.experince_description }}</p>
+            <!-- endif -->
+        {% endfor %}
+
+    </div>
+
+    <!-- eduction -->
+    <div class="user-profile-ov">
+        <h3>
+			<a class="ed-box-open">Education</a>
+            {% if request.user == current_user_profile.user %}
+			    <a href="{% url 'edit-profile'  %}"><i class="fa fa-pencil"></i></a>
+            {% endif %}
+		</h3>
+        {% if current_user_profile.education_title != None %}
+            <h4>{{ current_user_profile.education_title }}</h4>
+        {% endif %}
+
+        {% if current_user_profile.education_year_start != None and current_user_profile.education_year_end != None %}
+            <p>{{ current_user_profile.full_year }}</p>
+        {% endif %}
+
+        {% if current_user_profile.education_description != None %}
+            <pre>{{ current_user_profile.education_description }}</pre>
+        {% endif %}
+    </div>
+
+    <!-- location -->
+    <div class="user-profile-ov">
+        <h3>
+			<a>Location</a>
+            {% if request.user == current_user_profile.user %}
+			    <a href="{% url 'edit-profile'  %}"><i class="fa fa-pencil"></i></a>
+            {% endif %}
+		</h3>
+        <h4>{{ current_user_profile.location_country }}</h4>
+        <p>{{ current_user_profile.location_city }}</p>
+    </div>
+
+    <!-- tags -->
+    <div class="user-profile-ov">
+        <h3>
+            <a>Skills</a>
+            <!-- if request.user in his profile then show him the modification links -->
+            {% if request.user == current_user_profile.user %}
+                <a href="{% url 'edit-profile' %}"><i class="fa fa-pencil"></i></a>
+                <a href="{% url 'edit-profile' %}"><i class="fa fa-plus-square"></i></a>
+            {% endif %}
+        </h3>
+        <ul>
+            <!-- display tags if exits -->
+            {% for tag in user_tags %}
+                {% if tag.tag %}
+                    <li><a>{{ tag }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
