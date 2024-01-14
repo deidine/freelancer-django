@@ -17,34 +17,8 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 pd-left-none no-pd">
                             <div class="main-left-sidebar no-margin">
-                                <div class="user-data full-width">
-                                    <div class="user-profile">
-                                        <div class="username-dt">
-                                            <div class="usr-pic">
-                                                <img src="{{ my_profile.user.photo_profile.url }}" width="100" height="100">
-                                            </div>
-                                        </div><!--username-dt end-->
-                                        <div class="user-specs">
-                                            <h3>{{ my_profile.user.full_name}}</h3>
-                                            {% if my_profile.title %}
-                                                <span>{{ my_profile.title }}</span>
-                                            {% endif %}
-                                        </div>
-                                    </div><!--user-profile end-->
-                                    <ul class="user-fw-status">
-                                        <li>
-                                            <h4>Following</h4>
-                                            <span>{{ followers_count }}</span>
-                                        </li>
-                                        <li>
-                                            <h4>Followers</h4>
-                                            <span>{{ following_count }}</span>
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'user-profile' my_profile.user my_profile.id %}">View Profile</a>
-                                        </li>
-                                    </ul>
-                                </div><!--user-data end-->
+                              
+                                
                                 <div class="suggestions full-width">
                                     <div class="sd-title">
                                         <h3>Suggestions</h3>
@@ -83,18 +57,6 @@
                         </div>
                         <div class="col-lg-6 col-md-8 no-pd">
                             <div class="main-ws-sec">
-                                <div class="post-topbar">
-                                    <div class="user-picy">
-                                        <img src="{{ my_profile.user.photo_profile.url }}" width="100" height="50">
-                                    </div>
-                                    <div class="post-st">
-                                        <ul>
-                                            <li><a class="post_project" href="{% url 'post-project' %}">Post a Project</a></li>
-                                            <li><a class="post-jb" href="{% url 'post-job' %}" title="">Post a Job</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-
                                 <div class="posts-section">
                                     <!-- post all profile user -->
                                     {% for user_job in all_user_jobs %}

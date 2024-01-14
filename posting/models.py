@@ -25,13 +25,13 @@ class TagsJobs(models.Model):
 
 class PostProject(models.Model):
     user = models.ForeignKey("accounts.Account", on_delete=models.CASCADE, related_name='user')
-    name_project = models.CharField(max_length=100, blank=False, null=False)
+    nom_projet = models.CharField(max_length=100, blank=False, null=False)
     epic_coder = models.CharField(max_length=100, blank=False, null=False)
     location = models.CharField(max_length=100, blank=False, null=False)
-    start_price = models.IntegerField(blank=False, null=False)
-    end_price = models.IntegerField(blank=False, null=False)
-    description_project = models.TextField(blank=False, null=False)
-    hide = models.BooleanField(default=False)
+    prix_premiere = models.IntegerField(blank=False, null=False)
+    prix_derniere = models.IntegerField(blank=False, null=False)
+    description_projet = models.TextField(blank=False, null=False)
+    cacher = models.BooleanField(default=False)
 
     updated_project = models.DateTimeField(auto_now=True)
     created_project = models.DateTimeField(auto_now_add=True)
@@ -60,9 +60,9 @@ class PostJobs(models.Model):
     type_work_job = models.CharField(choices=STATUS_CHOICES, max_length=100, blank=False, null=False, default=1)
     epic_coder = models.CharField(max_length=100, blank=False, null=False)
     location = models.CharField(max_length=100, blank=False, null=False)
-    price = models.IntegerField(blank=False, null=False)
+    prix = models.IntegerField(blank=False, null=False)
     description_job = models.TextField(blank=False, null=False)
-    hide = models.BooleanField(default=False)
+    cacher = models.BooleanField(default=False)
 
     updated_job = models.DateTimeField(auto_now=True)
     created_job = models.DateTimeField(auto_now_add=True)

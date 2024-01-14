@@ -13,7 +13,7 @@ def most_viewed_this_week(request):
             jobs_most_viewed_this_week.append({
                 'job_id': job.id,
                 'name_jobs': job.name_jobs,
-                'price': job.price,
+                'prix': job.prix,
                 'description_job': job.description_job,
                 'counting': cmp,
             })
@@ -39,7 +39,7 @@ def top_jobs(request):
         top_jobs.append({
             'job_id': job.id,
             'name_jobs': job.name_jobs,
-            'price': job.price,
+            'prix': job.prix,
             'description_job': job.description_job,
             'counting': cmp,
         })

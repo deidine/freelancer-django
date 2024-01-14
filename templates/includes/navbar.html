@@ -1,18 +1,19 @@
 {% load static %}
 	{% if request.user.is_authenticated %}
 		<header>
-			<div class="container">
+			<div class="container ">
 			<div class="header-data">
-				<div class="logo">
-					<a href="{% url 'index' %}" title=""><img src="{% static 'images/logo.png' %}" alt=""></a>
-				</div><!--logo end-->
-				<div class="search-bar">
+				
+				{% comment %} <div class="search-bar">
 					<form action="{% url 'search-jobs' %}" method="GET">
 						<input type="text" name="q" placeholder="Search...">
 						<button type="submit"><i class="la la-search"></i></button>
 					</form>
-				</div><!--search-bar end-->
+				</div><!--search-bar end--> {% endcomment %}
 				<nav>
+					<div class="logo">
+					<a href="{% url 'index' %}" title=""><img src="{% static 'images/logo.png' %}" alt=""></a>
+				</div><!--logo end-->
 					<ul>
 						<li>
 							<a href="{% url 'index' %}" title="home">
@@ -21,25 +22,39 @@
 							</a>
 						</li>
 						<li>
-							<a href="{% url 'projects' %}" title="projects">
-								<span><img src="{% static 'images/icon3.png' %}"></span>
-								Projects
-							</a>
+							
+							<div class="dropdown">
+								<button class="dropbtn"> <img src="{% static 'images/icon3.png' %}">
+									<span>  <i class="la la-sort-down"></i></span></button>
+									<div class="dropdown-content">
+								  <a href="{%url 'post-project'%}">post projects</a>
+								  <a href="{% url 'projects' %}" title="jobs">projects</a>
+								</div>
+							  </div>
+							
+
 						</li>
 						<li>
-							<a href="{% url 'user-profile' request.user request.user.id %}" title="my profile">
-								<span><img src="{% static 'images/icon4.png' %} "></span>
-								Profile
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'jobs' %}" title="jobs">
-								<span><img src="{% static 'images/icon5.png' %}"></span>
-								Jobs
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'messages' %}">
+							 
+							<div class="dropdown">
+									<button class="dropbtn"> <img src="{% static 'images/icon5.png' %}">
+									<span>  <i class="la la-sort-down"></i></span></button>
+									<div class="dropdown-content">
+										<a href="{%url 'post-job'%}">post job</a>
+										<a href="{% url 'jobs' %}" title="jobs">jobs</a>
+									</div>
+								</div>
+								
+								
+							</li>
+							<li>
+								<a href="{% url 'user-profile' request.user request.user.id %}" title="my profile">
+									<span><img src="{% static 'images/icon4.png' %} "></span>
+									Profile
+								</a>
+							</li>
+							<li>
+								<a href="{% url 'messages' %}">
 
 								<span>
 									<i class="fa fa-envelope" aria-hidden="true"></i>

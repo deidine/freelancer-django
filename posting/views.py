@@ -188,7 +188,12 @@ def post_job(request):
             tags_jobs = form_tags_post_job.cleaned_data['tag']
             tags_list = list(tags_jobs.split(','))  # separate values with commas
             tags_list = [item.strip() for item in tags_list]  # strip all words
+            for item in tags_list:
+                print("dewidine mchnk"+item)
+
             while '' in tags_list: tags_list.remove('')  # remove '' from list
+            for item in tags_list:    
+                print("dewidine mchnk"+item)
             for tag in tags_list:
                 # save the information updated
                 tag, created = TagsJobs.objects.get_or_create(tags_users_jobs=request.user, tag=tag)
@@ -428,27 +433,27 @@ def create_tags_post_job(request, job_post_id):
 @login_required(login_url='login')
 def hide_projects(request, pk):
     post_project = PostProject.objects.get(id=pk)
-    post_project.hide = True
+    post_project.cacher = True
     post_project.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url='login')
 def unhide_projects(request, pk):
     post_project = PostProject.objects.get(id=pk)
-    post_project.hide = False
+    post_project.cacher = False
     post_project.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url='login')
 def hide_jobs(request, job_id):
     post_job = PostJobs.objects.get(id=job_id)
-    post_job.hide = True
+    post_job.cacher = True
     post_job.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url='login')
 def unhide_jobs(request, job_id):
     post_job = PostJobs.objects.get(id=job_id)
-    post_job.hide = False
+    post_job.cacher = False
     post_job.save()
     return redirect(request.META.get('HTTP_REFERER'))

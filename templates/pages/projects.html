@@ -108,7 +108,7 @@
 										{% if projects %}
 											{% for project in projects %}
 												<!-- if request.user is hide his project then hide his project for others users -->
-												{% if request.user != project.user and project.hide %}
+												{% if request.user != project.user and project.cacher %}
 													<!-- if the user hide his project-->
 												{% else %}
 													<div class="post-bar">
@@ -134,7 +134,7 @@
 																				Delete post
 																			</a>
 																		</li>
-																		{% if project.hide %}
+																		{% if project.cacher %}
 																			<li><a href="{% url 'unhide-project' project.id %}">unhide</a></li>
 																		{% else %}
 																			<li><a href="{% url 'hide-project' project.id %}">Hide</a></li>
@@ -171,7 +171,7 @@
 																{% endif %}
 
 																<!-- check if post project is hiding then show Hiding-->
-																{% if project.hide == True %}
+																{% if project.cacher == True %}
 																	<li>
 																		<a class="bid_now" style="background-color:gray;">Hiding</a>
 																	</li>
@@ -179,12 +179,12 @@
 															</ul>
 														</div>
 														<div class="job_descp">
-															<h3>{{ project.name_project }}</h3>
+															<h3>{{ project.nom_projet }}</h3>
 															<ul class="job-dt">
-																<li><span>${{ project.start_price }} - ${{ project.end_price }}</span></li>
+																<li><span>${{ project.prix_premiere }} - ${{ project.prix_derniere }}</span></li>
 															</ul>
 															<p>
-																{{ project.description_project | truncatechars:180 }}
+																{{ project.description_projet | truncatechars:180 }}
 																{% if project.description_project|length > 150 %}
 																	.....<a href="{% url 'comment-projects' project.id %}">view more</a>
 																{% endif %}
