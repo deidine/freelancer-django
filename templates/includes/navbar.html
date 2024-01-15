@@ -47,12 +47,7 @@
 								
 								
 							</li>
-							<li>
-								<a href="{% url 'user-profile' request.user request.user.id %}" title="my profile">
-									<span><img src="{% static 'images/icon4.png' %} "></span>
-									Profile
-								</a>
-							</li>
+							 
 							<li>
 								<a href="{% url 'messages' %}">
 
@@ -87,13 +82,21 @@
 				<div class="user-account">
 					<div class="user-info">
 						<img src="{{ request.user.photo_profile.url }}" width="35" height="35">
+						
 						<a title="{{ request.user.full_name }}">{{ request.user.first_name | truncatechars:11 }}</a>
 						<i class="la la-sort-down"></i>
 					</div>
 					<div class="user-account-settingss">
-						<h3>Setting</h3>
+						<h3 style="color: blanchedalmond;float: right;" class="tc"> Setting
+						<span><img src="{% static 'images/icon4.png' %} " width="15" height="15" style=""></span></h3>
 						<ul class="us-links">
-							<li><a href="{% url 'edit-profile' %}" title="">Account Setting</a></li>
+							<li><h3 class="tc"><a href="{% url 'edit-profile' %}" title="">Account Setting</a></h3></li>
+							
+						</ul>
+						<ul class="us-links"><li>
+						<h3 class="tc"><a href="{% url 'user-profile' request.user request.user.id %}" title="my profile">
+							Profile
+						</a></h3></li>
 						</ul>
 						<h3 class="tc"><a href="{% url 'logout' %}" title="">Logout</a></h3>
 					</div><!--user-account-settingss end-->

@@ -36,7 +36,7 @@ class PostJobForm(forms.ModelForm):
         self.fields['prix'].widget.attrs['placeholder'] = 'prix'
         self.fields['description_job'].widget.attrs['placeholder'] = 'Description'
 
-        self.fields['price'].widget.attrs['price'] = 'javascript: return event.keyCode === 8 ||event.keyCode === 46 ? true : !isNaN(Number(event.key))'
+        self.fields['prix'].widget.attrs['prix'] = 'javascript: return event.keyCode === 8 ||event.keyCode === 46 ? true : !isNaN(Number(event.key))'
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
             self.fields[field].required = True

@@ -46,7 +46,7 @@ class PostProject(models.Model):
         ordering = ['-created_project']
 
     def __str__(self):
-        return self.name_project
+        return self.nom_projet
 
 class PostJobs(models.Model):
     STATUS_CHOICES = (

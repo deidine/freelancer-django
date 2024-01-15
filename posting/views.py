@@ -181,7 +181,7 @@ def post_job(request):
             type_work_job = form_post_job.cleaned_data['type_work_job']
             epic_coder = form_post_job.cleaned_data['epic_coder']
             location = form_post_job.cleaned_data['location']
-            price = form_post_job.cleaned_data['price']
+            price = form_post_job.cleaned_data['prix']
             description_job = form_post_job.cleaned_data['description_job']
 
             # get the value of tags_post_values list
