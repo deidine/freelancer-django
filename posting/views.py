@@ -122,12 +122,12 @@ def post_projects(request):
         tags_objs = []
         if form_post_project.is_valid() and form_tags_post_project.is_valid():
             # get the values of post_project
-            name_project = form_post_project.cleaned_data['name_project']
+            name_project = form_post_project.cleaned_data['nom_projet']
             epic_coder = form_post_project.cleaned_data['epic_coder']
             location = form_post_project.cleaned_data['location']
-            start_price = form_post_project.cleaned_data['start_price']
-            end_price = form_post_project.cleaned_data['end_price']
-            description_project = form_post_project.cleaned_data['description_project']
+            start_price = form_post_project.cleaned_data['prix_premiere']
+            end_price = form_post_project.cleaned_data['prix_derniere']
+            description_project = form_post_project.cleaned_data['description_projet']
 
             # get the value of tags_post_values list
             tags_projects = form_tags_post_project.cleaned_data['tag']
@@ -142,12 +142,12 @@ def post_projects(request):
 
             form_post_projects = PostProject.objects.create(
                 user=request.user,
-                name_project=name_project,
+                nom_projet=name_project,
                 epic_coder=epic_coder,
                 location=location,
-                start_price=start_price,
-                end_price=end_price,
-                description_project=description_project
+                prix_premiere=start_price,
+                prix_derniere=end_price,
+                description_projet=description_project
             )
             # add tag_obj to skills tags projects
             form_post_projects.skills_tags_projects.set(tags_objs)
@@ -205,7 +205,7 @@ def post_job(request):
                 type_work_job=type_work_job,
                 epic_coder=epic_coder,
                 location=location,
-                price=price,
+                prix=price,
                 description_job=description_job
             )
             # add tag_obj to skills tags projects
