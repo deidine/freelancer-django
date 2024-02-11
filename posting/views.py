@@ -5,10 +5,10 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 # models
-from .models import PostProject, TagsProjects, TagsJobs, PostJobs
+from .models import PostProject,   PostJobs
 from accounts.models import UserProfile
 # forms
-from .forms import PostProjectForm, TagsProjectsForm, PostJobForm, TagsJobForm
+from .forms import PostProjectForm, PostJobForm 
 # pagination
 from django.core.paginator import Paginator
 
@@ -54,7 +54,7 @@ def search_jobs(request):
     print('------------------ search jobs ------------------')
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     all_user_profile = PostJobs.objects.filter(
-            Q(name_jobs__icontains=q) | Q(description_job__icontains=q) | Q(skills_tags_jobs__tag__iexact=q)
+            Q(name_jobs__icontains=q) | Q(description_job__icontains=q)  
         ).distinct()
 
     paginator_jobs = Paginator(all_user_profile, 7)
@@ -73,12 +73,7 @@ def filter_jobs(request):
     print('all_user_profile = ', all_user_profile)
 
     if request.method == 'POST':
-        if 'search_skills' in request.POST:
-            search_skills = request.POST['search_skills']  # dacia
-            if search_skills:
-                print('search_skills = ', search_skills)
-                all_user_profile = all_user_profile.filter(skills_tags_jobs__tag__icontains=search_skills)
-
+ 
         if 'availabilty' in request.POST:
             availabilty = request.POST['availabilty']
             if availabilty:
@@ -115,12 +110,10 @@ def filter_jobs(request):
 def post_projects(request):
     if request.method == 'POST':
         form_post_project = PostProjectForm(request.POST)
-        form_tags_post_project = TagsProjectsForm(request.POST)
-
-        print('form_post_projects.is_valid()     = ', form_post_project.is_valid())
-        print('form_tags_post_project.is_valid() = ', form_tags_post_project.is_valid())
-        tags_objs = []
-        if form_post_project.is_valid() and form_tags_post_project.is_valid():
+  
+        print('form_post_projects.is_valid()     = ', form_post_project.is_valid()) 
+ 
+        if form_post_project.is_valid()  :
             # get the values of post_project
             name_project = form_post_project.cleaned_data['nom_projet']
             epic_coder = form_post_project.cleaned_data['epic_coder']
@@ -128,18 +121,7 @@ def post_projects(request):
             start_price = form_post_project.cleaned_data['prix_premiere']
             end_price = form_post_project.cleaned_data['prix_derniere']
             description_project = form_post_project.cleaned_data['description_projet']
-
-            # get the value of tags_post_values list
-            tags_projects = form_tags_post_project.cleaned_data['tag']
-            tags_list = list(tags_projects.split(',')) # separate values with commas
-            tags_list = [item.strip() for item in tags_list] # strip all words
-            while '' in tags_list: tags_list.remove('') # remove '' from list
-
-            for tag in tags_list:
-                # save the information updated
-                tag, created = TagsProjects.objects.get_or_create(tags_users_projects=request.user, tag=tag)
-                tags_objs.append(tag)
-
+ 
             form_post_projects = PostProject.objects.create(
                 user=request.user,
                 nom_projet=name_project,
@@ -149,33 +131,29 @@ def post_projects(request):
                 prix_derniere=end_price,
                 description_projet=description_project
             )
-            # add tag_obj to skills tags projects
-            form_post_projects.skills_tags_projects.set(tags_objs)
+            # add tag_obj to skills tags projects 
             form_post_projects.save()
 
             messages.success(request, 'Your Project is created')
             return redirect('/projects/')
     else:
-        form_post_project = PostProjectForm()
-        form_tags_post_project = TagsProjectsForm()
+        form_post_project = PostProjectForm() 
 
     context = {
-        'form_post_project': form_post_project,
-        'form_tags_post_project': form_tags_post_project
+        'form_post_project': form_post_project, 
     }
     return render(request, 'post/post_project.html', context)
 
 # this method for posting a job
-@login_required(login_url='login')
 def post_job(request):
     if request.method == 'POST':
         form_post_job = PostJobForm(request.POST)
-        form_tags_post_job = TagsJobForm(request.POST)
+        # form_tags_post_job = TagsJobForm(request.POST)
 
         print('form_post_job.is_valid()      = ', form_post_job.is_valid())
-        print('form_tags_post_job.is_valid() = ', form_tags_post_job.is_valid())
+        # print('form_tags_post_job.is_valid() = ', form_tags_post_job.is_valid())
         tags_objs = []
-        if form_post_job.is_valid() and form_tags_post_job.is_valid():
+        if form_post_job.is_valid() :
             # get the values of post_project
             name_jobs = form_post_job.cleaned_data['name_jobs']
             type_work_job = form_post_job.cleaned_data['type_work_job']
@@ -184,20 +162,7 @@ def post_job(request):
             price = form_post_job.cleaned_data['prix']
             description_job = form_post_job.cleaned_data['description_job']
 
-            # get the value of tags_post_values list
-            tags_jobs = form_tags_post_job.cleaned_data['tag']
-            tags_list = list(tags_jobs.split(','))  # separate values with commas
-            tags_list = [item.strip() for item in tags_list]  # strip all words
-            for item in tags_list:
-                print("dewidine mchnk"+item)
-
-            while '' in tags_list: tags_list.remove('')  # remove '' from list
-            for item in tags_list:    
-                print("dewidine mchnk"+item)
-            for tag in tags_list:
-                # save the information updated
-                tag, created = TagsJobs.objects.get_or_create(tags_users_jobs=request.user, tag=tag)
-                tags_objs.append(tag)
+       
 
             form_post_jobs = PostJobs.objects.create(
                 user=request.user,
@@ -208,19 +173,15 @@ def post_job(request):
                 prix=price,
                 description_job=description_job
             )
-            # add tag_obj to skills tags projects
-            form_post_jobs.skills_tags_jobs.set(tags_objs)
+            # add tag_obj to skills tags projects 
             form_post_jobs.save()
 
             messages.success(request, 'Your Job is created')
             return redirect('/jobs/')
     else:
-        form_post_job = PostJobForm()
-        form_tags_post_job = TagsJobForm()
-
+        form_post_job = PostJobForm() 
     context = {
-        'form_post_job': form_post_job,
-        'form_tags_post_job': form_tags_post_job
+        'form_post_job': form_post_job, 
     }
     return render(request, 'post/post_job.html', context)
 
@@ -232,8 +193,8 @@ def search_projects(request):
         projects = PostProject.objects.all()
     else:
         projects = PostProject.objects.filter(
-            Q(name_project__icontains=q) | Q(description_project__icontains=q) | Q(skills_tags_projects__tag__icontains=q)
-        ).distinct()
+            Q(name_project__icontains=q) | Q(description_project__icontains=q) 
+         ).distinct()
 
     paginator_projects = Paginator(projects, 7)
     page_number_projects = request.GET.get('page')
@@ -249,12 +210,7 @@ def filter_project(request):
     my_profile = UserProfile.objects.get(user=request.user)
     projects = PostProject.objects.all()
     if request.method == 'POST':
-        if 'search_skills' in request.POST:
-            search_skills = request.POST['search_skills']  # dacia
-            if search_skills:
-                print('search_skills = ', search_skills)
-                projects = projects.filter(skills_tags_projects__tag__icontains=search_skills)
-
+         
         if 'availabilty' in request.POST:
             availabilty = request.POST['availabilty']
             if availabilty:
@@ -360,100 +316,5 @@ def delete_post_jobs(request, job_id):
         return redirect(request.META.get('HTTP_REFERER'))
     except:
         return redirect(request.META.get('HTTP_REFERER'))
-
-# this method for delete tags on post you want to update
-@login_required(login_url='login')
-def delete_tag_post_project(request, project_post_id, pk):
-    try:
-        tag = TagsProjects.objects.get(id=pk)
-        tag.delete()
-        messages.success(request, 'your tag is delete successfully')
-        return redirect(reverse('/projects/edit-post/', args=[project_post_id]))
-    except:
-        return redirect('/projects/edit-post/'+ str(project_post_id))
-
-@login_required(login_url='login')
-def delete_tag_post_job(request, job_post_id, pk):
-    try:
-        tag = TagsJobs.objects.get(id=pk)
-        tag.delete()
-        messages.success(request, 'your tag is delete successfully')
-        return redirect(reverse('/jobs/edit-post/', args=[job_post_id]))
-    except:
-        return redirect('/jobs/edit-post/' + str(job_post_id))
-
-# this method for create tags on post you want to update
-@login_required(login_url='login')
-def create_tags_post_project(request, project_post_id):
-    post_project = PostProject.objects.get(id=project_post_id)
-
-    tags_objs = []
-    for tag in post_project.skills_tags_projects.all():
-        tags_objs.append(tag)
-
-    if request.method == 'POST':
-        post_tags_project = request.POST['post_tags_project']
-        tags_list = list(post_tags_project.split(','))
-        tags_list = [item.strip() for item in tags_list]  # strip all words
-        while '' in tags_list: tags_list.remove('')  # remove '' from list
-
-        for tag in tags_list:
-            # save the information updated
-            tag, created = TagsProjects.objects.get_or_create(tags_users_projects=request.user, tag=tag)
-            tags_objs.append(tag)
-        post_project.skills_tags_projects.set(tags_objs)
-        post_project.save()
-    messages.success(request, 'your tag is created successfully')
-    return redirect('/projects/edit-post/' + str(project_post_id))
-
-# this method for create tags on post you want to update
-@login_required(login_url='login')
-def create_tags_post_job(request, job_post_id):
-    post_job = PostJobs.objects.get(id=job_post_id)
-
-    tags_objs = []
-    for tag in post_job.skills_tags_jobs.all():
-        tags_objs.append(tag)
-
-    if request.method == 'POST':
-        post_tags_job = request.POST['post_tags_job']
-        tags_list = list(post_tags_job.split(','))
-        tags_list = [item.strip() for item in tags_list]  # strip all words
-        while '' in tags_list: tags_list.remove('')  # remove '' from list
-
-        for tag in tags_list:
-            # save the information updated
-            tag, created = TagsJobs.objects.get_or_create(tags_users_jobs=request.user, tag=tag)
-            tags_objs.append(tag)
-        post_job.skills_tags_jobs.set(tags_objs)
-        post_job.save()
-    messages.success(request, 'your tag is created successfully')
-    return redirect('/jobs/edit-post/' + str(job_post_id))
-
-@login_required(login_url='login')
-def hide_projects(request, pk):
-    post_project = PostProject.objects.get(id=pk)
-    post_project.cacher = True
-    post_project.save()
-    return redirect(request.META.get('HTTP_REFERER'))
-
-@login_required(login_url='login')
-def unhide_projects(request, pk):
-    post_project = PostProject.objects.get(id=pk)
-    post_project.cacher = False
-    post_project.save()
-    return redirect(request.META.get('HTTP_REFERER'))
-
-@login_required(login_url='login')
-def hide_jobs(request, job_id):
-    post_job = PostJobs.objects.get(id=job_id)
-    post_job.cacher = True
-    post_job.save()
-    return redirect(request.META.get('HTTP_REFERER'))
-
-@login_required(login_url='login')
-def unhide_jobs(request, job_id):
-    post_job = PostJobs.objects.get(id=job_id)
-    post_job.cacher = False
-    post_job.save()
-    return redirect(request.META.get('HTTP_REFERER'))
+ 
+ 

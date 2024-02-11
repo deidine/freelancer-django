@@ -182,87 +182,12 @@
                     <div class="col-lg-9">
                         <div class="tab-pane fade show active">
                             <div class="acc-setting">
-                                <h3>Edit Tags</h3>
-                                <div class="user-profile-ov">
-                                    {% if request.user == user_profile.user %}
-                                        <form action="{% url 'create-user-tags' %}" method="POST" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <div class="form-row">
-                                                <!-- title  -->
-                                                <div class="form-group col-md-12">
-                                                    <!-- display if user_tags exists -->
-                                                    {% if user_tags %}
-                                                    <ul>
-                                                        {% for tag in user_tags %}
-                                                            <!-- if tag has null value then ignore it-->
-                                                            {% if tag.tag %}
-                                                                <li>
-                                                                    <a href="{% url 'delete-user-tags' tag.id %}">
-                                                                        {{ tag }}
-                                                                        <i class="la la-close"></i>
-                                                                    </a>
-                                                                </li>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </ul>
-                                                    {% endif %}
-                                                    <label class="topic_label">Tags</label>
-                                                    {{ user_tags_form.tag }}
-                                                </div>
-
-                                                <!-- save experience informations -->
-                                                <div class="form-group col-md-10">
-                                                    <input type="submit" value="Save" class="btn btn-danger" style="background-color:#e44d3a; color:white;">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    {% else %}
-                                        <p>no</p>
-                                    {% endif %}
-                                </div>
+                               
                             </div>
-                        </div>
                     </div>
                 </div>
 
-                <br><br>
 
-                <!-- links media -->
-                <div class="row">
-                    <div class="col-lg-3"></div>
-                    <div class="col-lg-9">
-                        <div class="tab-pane fade show active">
-                            <div class="acc-setting">
-                                <h3>Edit links</h3>
-                                <div class="user-profile-ov">
-                                    {% if request.user == user_profile.user %}
-                                        <form action="{% url 'create-links-media' %}" method="POST" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            <div class="form-row">
-                                                <!-- title  -->
-                                                {% for link in user_links_media %}
-                                                    {% if link.name != None %}
-                                                        <div class="form-group col-md-3">
-                                                            <p>{{ link.name }}</p>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <p>{{ link.link }}</p>
-                                                        </div>
-                                                        <div class="form-group col-md-3">
-                                                            <a href="{% url 'edit-links-media' link.id %}" class="btn btn-light">Update</a>
-                                                            <a href="{% url 'delete-links-media' link.id %}" onclick="return confirm('Are you sure you want te delete this link')" class="btn btn-danger">Delete</a>
-                                                        </div>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </div>
-                                        </form>
-                                        <a href="{% url 'create-links-media' %}" class="btn btn-danger" style="background-color:#e44d3a; color:white;">Create</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

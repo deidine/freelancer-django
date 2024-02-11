@@ -4,14 +4,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action, api_view, permission_classes
-from posting.models import PostProject, PostJobs, TagsProjects, TagsJobs
+from posting.models import PostProject, PostJobs 
 from comment.models import CommentProjects, CommentJobs
 from accounts.models import UserProfile
 from restapi.serializers import (
     PostingProjectSerializer,
-    PostingJobSerializer,
-    TagsProjectsSerializer,
-    TagsJobsSerializer,
+    PostingJobSerializer, 
 
     # Comment
     CommentProjectSerializer,
@@ -166,15 +164,10 @@ class PostingProjectAPIView(APIView):
     # add new post
     def post(self, request):
         print('--- post ---')
-        data = request.data
-        skills_tag_project = data['skills_tags_projects']
+        data = request.data 
         ids_of_tag_project = []
-        for tag in skills_tag_project:
-            tag_project, created = TagsProjects.objects.get_or_create(tags_users_projects=request.user, tag=tag)
-            ids_of_tag_project.append(tag_project.id)
-
-        data['user'] = request.user.id
-        data['skills_tags_projects'] = ids_of_tag_project
+       
+        data['user'] = request.user.id 
         project_form = PostingProjectSerializer(data=data)
         # print('project_form.is_valid() = ', project_form.is_valid())
         # print('project_form.errors = ', project_form.errors)
@@ -345,14 +338,8 @@ class PostingJobAPIView(APIView):
     def post(self, request):
         print('--- post ---')
         data = request.data
-        skills_tag_job = data['skills_tags_jobs']
-        ids_of_tag_job = []
-        for tag in skills_tag_job:
-            tag_job, created = TagsJobs.objects.get_or_create(tags_users_jobs=request.user, tag=tag)
-            ids_of_tag_job.append(tag_job.id)
-
+         
         data['user'] = request.user.id
-        data['skills_tags_jobs'] = ids_of_tag_job
         job_form = PostingJobSerializer(data=data)
         # print('job_form.is_valid() = ', job_form.is_valid())
         # print('job_form.errors = ', job_form.errors)
@@ -374,29 +361,4 @@ def get_user_post_job(request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response({'message': 'This job is not exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-class DeleteTagsProjectsViewsets(viewsets.ModelViewSet):
-    serializer_class = TagsProjectsSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def destroy(self, request, pk=None, *args, **kwargs):
-        print('--- destroy ---')
-        try:
-            tag_project = TagsProjects.objects.get(id=pk)
-            tag_project.delete()
-            return Response({'message': 'your tag project is deleted successfully'})
-        except:
-            return Response({'message': 'this post is not exist'})
-
-class DeleteTagsJobsViewsets(viewsets.ModelViewSet):
-    serializer_class = TagsJobsSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def destroy(self, request, pk=None, *args, **kwargs):
-        print('--- destroy ---')
-        try:
-            tag_job = TagsJobs.objects.get(id=pk)
-            tag_job.delete()
-            return Response({'message': 'your tag job is deleted successfully'})
-        except:
-            return Response({'message': 'this tag is not exist'})
+ 

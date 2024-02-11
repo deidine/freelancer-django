@@ -1,28 +1,7 @@
 from django.db import models
 
 
-class TagsProjects(models.Model):
-    tags_users_projects = models.ForeignKey("accounts.Account", on_delete=models.CASCADE,  related_name='tags_users_projects')
-    tag = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'tags Projects'
-        verbose_name_plural = 'TagsUsers Projects'
-
-    def __str__(self):
-        return self.tag if self.tag else ''
-
-class TagsJobs(models.Model):
-    tags_users_jobs = models.ForeignKey("accounts.Account", on_delete=models.CASCADE,  related_name='tags_users_jobs')
-    tag = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'tags jobs'
-        verbose_name_plural = 'TagsUsers jobs'
-
-    def __str__(self):
-        return self.tag if self.tag else ''
-
+ 
 class PostProject(models.Model):
     user = models.ForeignKey("accounts.Account", on_delete=models.CASCADE, related_name='user')
     nom_projet = models.CharField(max_length=100, blank=False, null=False)
@@ -35,8 +14,6 @@ class PostProject(models.Model):
 
     updated_project = models.DateTimeField(auto_now=True)
     created_project = models.DateTimeField(auto_now_add=True)
-
-    skills_tags_projects = models.ManyToManyField(TagsProjects, blank=True)
     likes = models.ManyToManyField("accounts.Account", blank=True, related_name='likes_post_projects')
     viewers_project = models.ManyToManyField("accounts.Account", blank=True, related_name='viewers_project')
 
@@ -67,7 +44,6 @@ class PostJobs(models.Model):
     updated_job = models.DateTimeField(auto_now=True)
     created_job = models.DateTimeField(auto_now_add=True)
 
-    skills_tags_jobs = models.ManyToManyField(TagsJobs, blank=True)
     likes = models.ManyToManyField("accounts.Account", blank=True, related_name='likes_post_jobs')
     viewers_job = models.ManyToManyField("accounts.Account", blank=True, related_name='viewers_job')
 

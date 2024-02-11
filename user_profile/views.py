@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 # models
-from accounts.models import UserProfile, Experience_user, TagsUser, Social_media
+from accounts.models import UserProfile, Experience_user 
 from follow.models import Follow
 from posting.models import PostProject, PostJobs
 # forms
-from .forms import UserForm, UserProfileForm, ExperienceUserForm, TagsUserForm, SocialMediaForm
+from .forms import UserForm, UserProfileForm, ExperienceUserForm 
 # pagination
 from django.core.paginator import Paginator
 
@@ -54,19 +54,14 @@ def user_profile(request, name_user, pk):
     # get currently user profile
     current_user_profile = UserProfile.objects.get(user__pk=pk)
 
-    # get user_tags
-    user_tags = TagsUser.objects.filter(tags_user__pk=pk)
-
+ 
     # get info of follow current user
     current_follow_user = Follow.objects.get(user__pk=pk)
 
     # get following & followers current_user
     following_count = current_follow_user.following.all().count()
     followers_count = current_follow_user.followers.all().count()
-
-    # get all links of social networking
-    links_media = Social_media.objects.filter(social_media_user=current_user_profile.user)[0:8]
-
+ 
     # get request user for display saved jobs
     my_profile = UserProfile.objects.get(user=request.user)
 
@@ -81,9 +76,7 @@ def user_profile(request, name_user, pk):
     context = {
         'current_user_profile': current_user_profile,
         'user_experience': user_experience,
-        'user_tags': user_tags,
         'all_user_profile': all_user_profile,
-        'links_media': links_media,
         'current_follow_user': current_follow_user,
         'following_count': following_count,
         'followers_count': followers_count,
@@ -102,11 +95,8 @@ def edit_profile(request):
     user_experience = Experience_user.objects.filter(experience_user=request.user)
 
     # get user_tags
-    user_tags = TagsUser.objects.filter(tags_user=request.user)
-    user_tags_form = TagsUserForm(instance=request.user)
 
     # get link social media
-    user_links_media = Social_media.objects.filter(social_media_user=request.user)
 
     if request.method == 'POST':
         # get information of userform & userprofile
@@ -128,12 +118,9 @@ def edit_profile(request):
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
-        'user_tags_form': user_tags_form,
 
-        'user_tags': user_tags,
         'user_experience': user_experience,
         'user_profile': user_profile,
-        'user_links_media': user_links_media,
 
         # 'request_user_profile': request_user_profile
     }
@@ -196,123 +183,7 @@ def delete_experience_user(request, pk):
         return redirect(reverse('/accounts-setting/edit-profile/', args=[request.user]))
     except:
         return redirect('/accounts-setting/edit-profile/', request.user)
-
-@login_required(login_url='login')
-def create_tags_user(request):
-    # get user_profile to add new tag
-    user_profile = UserProfile.objects.get(user=request.user)
-
-    if request.method == 'POST':
-        # get information of usertags
-        user_tags_form = TagsUserForm(request.POST, request.FILES, instance=request.user)
-
-        tags_objs = []
-        if user_tags_form.is_valid():
-            tags = user_tags_form.cleaned_data['tag']
-            tags_list = list(tags.split(','))
-            tags_list = [item.strip() for item in tags_list]  # strip all words
-            while '' in tags_list: tags_list.remove('')  # remove '' from list
-
-            # add tags to list and check if tag exists of exists.
-            for tag in tags_list:
-                # save the information updated
-                tag, created = TagsUser.objects.get_or_create(tags_user=request.user, tag=tag)
-                tags_objs.append(tag)
-
-            # add tags to UserProfile
-            user_profile.skills_tags_user.set(tags_objs)
-            user_profile.save()
-
-            if len(tags_objs) <= 1:
-                messages.success(request, 'your tag has been created')
-            else:
-                messages.success(request, 'your tags has been created')
-            return redirect('/accounts-setting/edit-profile/', request.user)
-    else:
-        user_tags_form = TagsUserForm(instance=request.user)
-
-    context = {
-        'user_tags_form': user_tags_form,
-    }
-    return render(request, 'profile_user/edit_profile.html', context)
-
-@login_required(login_url='login')
-def delete_tags_user(request, pk):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-        tag = TagsUser.objects.get(id=pk, tags_user=user_profile.user)
-        tag_name = tag.tag
-        tag.delete()
-        messages.success(request, 'your tag "' + tag_name + '" is delete')
-        return redirect(reverse('/accounts-setting/edit-profile/', args=[request.user]))
-    except:
-        return redirect('/accounts-setting/edit-profile/', request.user)
-
-@login_required(login_url='login')
-def create_links_media(request):
-    user_links_media = SocialMediaForm()
-    if request.method == 'POST':
-        # get information of links_of_social_media
-        social_media_form = SocialMediaForm(request.POST)
-
-        # check user_form & profile_form is valid
-        if social_media_form.is_valid():
-            name = social_media_form.cleaned_data['name']
-            link = social_media_form.cleaned_data['link']
-
-            # save the information updated
-            link = Social_media.objects.create(
-                social_media_user=request.user,
-                name=name, link=link
-            )
-            # link_name = link.name
-            link.save()
-            # messages.success(request, 'your link "' + link_name + '" has been created')
-            messages.success(request, 'your link has been created')
-            return redirect('/accounts-setting/edit-profile/', request.user)
-
-    context = {
-        'user_links_media': user_links_media,
-    }
-    return render(request, 'profile_user/user_links/create_link.html', context)
-
-@login_required(login_url='login')
-def edit_links_media(request, pk):
-    # get link of your social network or your website
-    user_links_media = Social_media.objects.get(id=pk)
-    if request.method == 'POST':
-        print('\nif\n')
-        # get information of userform & userprofile
-        link_media_form = SocialMediaForm(request.POST, request.FILES, instance=user_links_media)
-
-        # check user_experience_form
-        if link_media_form.is_valid():
-            # save the information updated
-            link_media_form.save()
-            messages.success(request, 'Your link has been updated')
-            return redirect('/accounts-setting/edit-profile/', request.user)
-    else:
-        link_media_form = SocialMediaForm(instance=user_links_media)
-
-    context = {
-        'link_media_form': link_media_form,
-        'user_links_media': user_links_media,
-    }
-
-    return render(request, 'profile_user/user_links/edit_link.html', context)
-
-@login_required(login_url='login')
-def delete_links_media(request, pk):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-        links = Social_media.objects.get(id=pk, social_media_user=user_profile.user)
-        link_name = links.link
-        links.delete()
-        messages.success(request, 'your link "' + link_name + '" is delete')
-        return redirect(reverse('/accounts-setting/edit-profile/', args=[request.user]))
-    except:
-        return redirect('/accounts-setting/edit-profile/', request.user)
-
+  
 # save jobs to my_profile
 @login_required(login_url='login')
 def saved_jobs(request, pk):

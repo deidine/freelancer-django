@@ -22,12 +22,12 @@ urlpatterns = [
     path('', include('conversations.urls')),
 
     # restapi
-    # path('api/', include('restapi.rest_urls.authentications_urls')),
-    # path('api/', include('restapi.rest_urls.follow_urls')),
-    # path('api/', include('restapi.rest_urls.posting_urls')),
-    # path('api/', include('restapi.rest_urls.notifications_urls')),
-    # path('api/', include('restapi.rest_urls.conversation_urls')),
-    # path('api/', include('restapi.rest_urls.user_profile_urls')),
+    path('api/', include('restapi.rest_urls.authentications_urls')),
+    path('api/', include('restapi.rest_urls.follow_urls')),
+    path('api/', include('restapi.rest_urls.posting_urls')),
+    path('api/', include('restapi.rest_urls.notifications_urls')),
+    path('api/', include('restapi.rest_urls.conversation_urls')),
+    path('api/', include('restapi.rest_urls.user_profile_urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

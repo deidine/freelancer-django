@@ -108,7 +108,7 @@
 							<div class="posts-section">
 								{% if all_user_profile %}
 									{% for user_profile_job in all_user_profile %}
-										{% if request.user.username != user_profile_job.user.username and user_profile_job.cacher %}
+										{% if request.user.username != user_profile_job.user.username   %}
 											<!-- if the user hide his job -->
 										{% else %}
 											<div class="post-bar">
@@ -132,11 +132,7 @@
 																		Delete Post
 																	</a>
 																</li>
-																{% if user_profile_job.cacher %}
-																	<li><a href="{% url 'unhide-job' user_profile_job.id %}">unhide</a></li>
-																{% else %}
-																	<li><a href="{% url 'hide-job' user_profile_job.id %}">Hide</a></li>
-																{% endif %}
+																 
 																<li><a href="#" class="close-ed-opts">Close</a></li>
 															</ul>
 														</div>
@@ -171,14 +167,7 @@
 														</ul>
 													{% endif %}
 
-													<!-- check if post project is hiding then show Hiding-->
-													{% if user_profile_job.cacher == True %}
-														<ul class="bk-links">
-															<li>
-																<a class="bid_now" style="background-color:gray;">Hiding</a>
-															</li>
-														</ul>
-													{% endif %}
+													 
 												</div>
 												<div class="job_descp">
 													<h3>{{user_profile_job.name_jobs }}</h3>
@@ -192,11 +181,7 @@
 															....<a href="{% url 'comment-jobs' user_profile_job.id %}">view more</a>
 														{% endif %}
 													</p>
-													<ul class="skill-tags">
-														{% for tags in user_profile_job.skills_tags_jobs.all %}
-															<li><a>{{ tags }}</a></li>
-														{% endfor %}
-													</ul>
+													
 												</div>
 												<div class="job-status-bar">
 													<ul class="like-com">
@@ -300,7 +285,7 @@
 							</div><!--widget-jobs end-->
 							<div class="widget widget-jobs">
 								<div class="sd-title">
-									<h3>Most Viewed This Week</h3>
+									<h3>Les plus vues cette semaine</h3>
 								</div>
 								<div class="jobs-list">
 									{% for most_viewed in jobs_most_viewed_this_week %}

@@ -1,10 +1,10 @@
 from accounts.models import Account, UserProfile
-from posting.models import PostProject, PostJobs, TagsProjects, TagsJobs
+from posting.models import PostProject, PostJobs 
 from comment.models import CommentProjects, CommentJobs
 from follow.models import Follow
 from notifications.models import NotificationProjects
 from conversations.models import Message
-from user_profile.models import Experience_user, Social_media, TagsUser
+from user_profile.models import Experience_user 
 
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -55,21 +55,7 @@ class UserExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experience_user
         fields = ('id', 'experience_user', 'experince_title', 'experince_description')
-
-# ----------------------- Social Media section --------------------------
-
-class SocialMediaLinksSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Social_media
-        fields = ('id', 'social_media_user', 'name', 'link')
-
-# ----------------------- Social Media section --------------------------
-
-class TagsUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TagsUser
-        fields = ('id', 'tags_user', 'tag')
-
+ 
 # --------------------- Comment section ---------------------------------
 class CommentProjectSerializer(serializers.ModelSerializer):
     # post_project = serializers.StringRelatedField(many=False)
@@ -86,34 +72,24 @@ class CommentJobSerializer(serializers.ModelSerializer):
         fields = ('user_job', 'body')
 
 # ----------------------- Post section -----------------------------
-class TagsProjectsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TagsProjects
-        fields = ('tag',)
-
-class TagsJobsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TagsJobs
-        fields = ('tag',)
-
+ 
 class PostingProjectSerializer(serializers.ModelSerializer):
     likes = UserSerializer(many=True)
-    viewers_project = UserSerializer(many=True)
-    skills_tags_projects = TagsProjectsSerializer(many=True)
+    viewers_project = UserSerializer(many=True) 
     # comment_project = CommentProjectSerializer(many=True, read_only=True)
     class Meta:
         model = PostProject
         fields = ('id', 'user', 'name_project', 'epic_coder', 'location', 'start_price', 'end_price', 'description_project',
-                    'skills_tags_projects', 'likes', 'viewers_project')
+                      'likes', 'viewers_project')
 
 class PostingJobSerializer(serializers.ModelSerializer):
     likes = UserSerializer(many=True)
     viewers_job = UserSerializer(many=True)
-    skills_tags_jobs = TagsJobsSerializer(many=True)
+    # skills_tags_jobs = TagsJobsSerializer(many=True)
     class Meta:
         model = PostJobs
         fields = ('user', 'name_jobs', 'type_work_job', 'epic_coder', 'location', 'price', 'description_job',
-         'skills_tags_jobs', 'likes', 'viewers_job')
+     'likes', 'viewers_job')
 
 # ----------------------- Follow section -----------------------------
 class FollowSerializer(serializers.ModelSerializer):

@@ -148,7 +148,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = { 'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'freelancer',
+        'NAME': 'freelancer1',
         'USER': 'root',
         'PASSWORD': '',
         'HOST':'localhost',

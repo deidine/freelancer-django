@@ -9,9 +9,7 @@ from restapi.rest_views.posting_views import (
 
     get_user_post_project,
     get_user_post_job,
-
-    DeleteTagsProjectsViewsets,
-    DeleteTagsJobsViewsets
+ 
 )
 
 router = routers.DefaultRouter()
@@ -19,11 +17,7 @@ router = routers.DefaultRouter()
 # post project or job section
 router.register('projects', PostingProjectViewsets, basename='projects')
 router.register('jobs', PostingJobViewsets, basename='jobs')
-
-# delete post section
-router.register('delete-tags-project', DeleteTagsProjectsViewsets, basename='delete-tags-project')
-router.register('delete-tags-job', DeleteTagsJobsViewsets, basename='delete-tags-jobs')
-
+ 
 urlpatterns = [
     path('', include(router.urls)),
 

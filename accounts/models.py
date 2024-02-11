@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # models
-from user_profile.models import Experience_user, TagsUser, Social_media
+from user_profile.models import Experience_user 
 from posting.models import PostProject, PostJobs
 import datetime
 
@@ -101,9 +101,6 @@ class UserProfile(models.Model):
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-
-    skills_tags_user = models.ManyToManyField(TagsUser, blank=True, related_name='skills_tags_user')
-    links_media = models.ForeignKey(Social_media, on_delete=models.CASCADE, blank=True, related_name='links_media')
     experience = models.ForeignKey(Experience_user, on_delete=models.CASCADE, blank=True, related_name='exp_user')
     likes = models.ManyToManyField(Account, blank=True, related_name='likes_jobs')
     saved_jobs = models.ManyToManyField(PostJobs, blank=True, related_name='saved_jobs')

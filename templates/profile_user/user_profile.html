@@ -52,17 +52,7 @@
 										</li>
 									</ul>
 								</div><!--user_pro_status end-->
-								<ul class="social_links">
-									{% for link in links_media %}
-										{% if link.name != None %}
-											{% if link.name == 'facebook' %}
-												<li><a href="{{link.link}}" title=""><i class="fa fa-{{link.name}}-square"></i> {{ link.link | truncatechars:31 }}</a></li>
-											{% else %}
-												<li><a href="{{link.link}}" title=""><i class="fa fa-{{link.name}}"></i> {{ link.link | truncatechars:31 }}</a></li>
-											{% endif %}
-										{% endif %}
-									{% endfor %}
-								</ul>
+								
 							</div><!--user_profile end-->
 							<div class="suggestions full-width">
 								<div class="sd-title">

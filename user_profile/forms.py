@@ -1,5 +1,5 @@
 from django import forms
-from accounts.models import Account, UserProfile, Experience_user, TagsUser, Social_media
+from accounts.models import Account, UserProfile, Experience_user 
 
 class ExperienceUserForm(forms.ModelForm):
     class Meta:
@@ -11,30 +11,7 @@ class ExperienceUserForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
-class TagsUserForm(forms.ModelForm):
-    class Meta:
-        model = TagsUser
-        fields = ('tag',)
 
-    def __init__(self, *args, **kwargs):
-        super(TagsUserForm, self).__init__(*args, **kwargs)
-        self.fields['tag'].widget.attrs['id'] = 'tags'
-
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
-            self.fields[field].widget.attrs['placeholder'] = 'add tags, separated by commas. example: design, programmation, photographe, .....'
-            self.fields[field].required = True
-
-class SocialMediaForm(forms.ModelForm):
-    class Meta:
-        model = Social_media
-        fields = ('name', 'link')
-
-    def __init__(self, *args, **kwargs):
-        super(SocialMediaForm, self).__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
-            self.fields[field].required = True
 
 class UserForm(forms.ModelForm):
     photo_profile = forms.ImageField(required=False, error_messages={'invalid': "Image files only"}, widget=forms.FileInput)

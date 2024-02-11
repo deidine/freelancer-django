@@ -1,13 +1,13 @@
 from django import forms
-from .models import PostProject, TagsProjects, PostJobs, TagsJobs
-
+from .models import PostProject,  PostJobs
+ 
 
 class PostProjectForm(forms.ModelForm):
     class Meta:
         model = PostProject
         fields = '__all__'
-        exclude = ['user', 'skills_tags_projects', 'viewers_project', 'updated_project', 'created_project', 'likes', 'cacher']
-
+        exclude = ['user', 'viewers_project', 'updated_project', 'created_project', 'likes', 'cacher']
+   
     def __init__(self, *args, **kwargs):
         super(PostProjectForm, self).__init__(*args, **kwargs)
         self.fields['nom_projet'].widget.attrs['placeholder'] = 'titre du projet'
@@ -26,8 +26,8 @@ class PostJobForm(forms.ModelForm):
     class Meta:
         model = PostJobs
         fields = '__all__'
-        exclude = ['user', 'skills_tags_jobs', 'viewers_job', 'updated_job', 'created_job', 'likes', 'cacher']
-
+        exclude = ['user',  'viewers_job', 'updated_job', 'created_job', 'likes', 'cacher']
+ 
     def __init__(self, *args, **kwargs):
         super(PostJobForm, self).__init__(*args, **kwargs)
         self.fields['name_jobs'].widget.attrs['placeholder'] = 'titre Traveil'
@@ -40,31 +40,4 @@ class PostJobForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
             self.fields[field].required = True
-
-class TagsProjectsForm(forms.ModelForm):
-    class Meta:
-        model = TagsProjects
-        fields = ('tag',)
-
-    def __init__(self, *args, **kwargs):
-        super(TagsProjectsForm, self).__init__(*args, **kwargs)
-        self.fields['tag'].widget.attrs['placeholder'] = 'Tags'
-        self.fields['tag'].widget.attrs['id'] = 'tags_project'
-        self.fields['tag'].widget.attrs['placeholder'] = 'add tags, separated by commas. example: design, programmation, photographe, .....'
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
-            self.fields[field].required = True
-
-class TagsJobForm(forms.ModelForm):
-    class Meta:
-        model = TagsJobs
-        fields = ('tag',)
-
-    def __init__(self, *args, **kwargs):
-        super(TagsJobForm, self).__init__(*args, **kwargs)
-        self.fields['tag'].widget.attrs['placeholder'] = 'Tags'
-        self.fields['tag'].widget.attrs['id'] = 'tags_job'
-        self.fields['tag'].widget.attrs['placeholder'] = 'add tags, separated by commas. example: design, programmation, photographe, .....'
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
-            self.fields[field].required = True
+ 

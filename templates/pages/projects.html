@@ -108,7 +108,7 @@
 										{% if projects %}
 											{% for project in projects %}
 												<!-- if request.user is hide his project then hide his project for others users -->
-												{% if request.user != project.user and project.cacher %}
+												{% if request.user != project.user %}
 													<!-- if the user hide his project-->
 												{% else %}
 													<div class="post-bar">
@@ -134,11 +134,8 @@
 																				Delete post
 																			</a>
 																		</li>
-																		{% if project.cacher %}
-																			<li><a href="{% url 'unhide-project' project.id %}">unhide</a></li>
-																		{% else %}
-																			<li><a href="{% url 'hide-project' project.id %}">Hide</a></li>
-																		{% endif %}
+																		
+																		
 																		<li><a href="" class="close-ed-opts">close</a></li>
 																	</ul>
 																</div>
@@ -169,13 +166,7 @@
 																		</li>
 																	{% endif %}
 																{% endif %}
-
-																<!-- check if post project is hiding then show Hiding-->
-																{% if project.cacher == True %}
-																	<li>
-																		<a class="bid_now" style="background-color:gray;">Hiding</a>
-																	</li>
-																{% endif %}
+ 
 															</ul>
 														</div>
 														<div class="job_descp">
@@ -189,14 +180,7 @@
 																	.....<a href="{% url 'comment-projects' project.id %}">view more</a>
 																{% endif %}
 															</p>
-															<ul class="skill-tags">
-																<!-- display all tags of this project-->
-																{% for tags in project.skills_tags_projects.all %}
-																	<li>
-																		<a>{{ tags }}</a>
-																	</li>
-																{% endfor %}
-															</ul>
+														 
 														</div>
 														<div class="job-status-bar">
 															<ul class="like-com">
@@ -282,7 +266,7 @@
 								<div class="right-sidebar">
 									<div class="widget widget-jobs">
 										<div class="sd-title">
-											<h3>Top Jobs</h3>
+											<h3>Meilleurs emplois</h3>
 										</div>
 										<div class="jobs-list">
 											{% for top in top_jobs %}
@@ -302,7 +286,7 @@
 									</div><!--widget-jobs end-->
 									<div class="widget widget-jobs">
 										<div class="sd-title">
-											<h3>Most Viewed This Week</h3>
+											<h3>Les plus vues cette semaine</h3>
 										</div>
 										<div class="jobs-list">
 											{% for most_viewed in jobs_most_viewed_this_week %}

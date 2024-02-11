@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'title', 'experience', 'education_title', 'location_country', 'location_city',
-                   'links_media', 'experience']
+                     'experience']
     prepopulated_fields = {'slug': ('user',)}
 
 class AccountAdmin(UserAdmin):
